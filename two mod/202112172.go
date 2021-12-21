@@ -41,6 +41,20 @@ func main() {
 		select 语句
 	*/
 
-	//var demoC1, demoC2, demoC3 chan int
-	//var int
+	var demoC1, demoC2, demoC3 chan int
+	var demoI1, demoI2 int
+	select {
+	case demoI1 = <-demoC1:
+		fmt.Printf("received ", demoI1, " from demoC1\n")
+	case demoC2 <- demoI2:
+		fmt.Printf("sent ", demoI2, " from demoC3\n")
+	case demoi3, ok := (<-demoC3):
+		if ok {
+			fmt.Printf("received ", demoi3, " from demoC3\n")
+		} else {
+			fmt.Printf("demoC3 is closed\n")
+		}
+	default:
+		fmt.Printf("no communication\n")
+	}
 }
