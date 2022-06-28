@@ -20,8 +20,48 @@ func main() {
 	id, err := res.LastInsertId()
 	checkErr(err)
 
-	fmt.Print(id)
+	fmt.Println(id)
 
+	//更新数据
+	stmt, err = db.Prepare("update my_job set department_id = ? , job_name = ? where id = ?")
+	checkErr(err)
+
+	res, err = stmt.Exec("1", "Bob", "10")
+	checkErr(err)
+
+	affect, err := res.RowsAffected()
+	checkErr(err)
+
+	fmt.Println(affect)
+
+	//查询数据
+	rows, err := db.Query("select * from my_job")
+	checkErr(err)
+
+	for rows.Next() {
+		var id int
+		var department_id int
+		var job_name string
+		err = rows.Scan(&id, &department_id, &job_name)
+		checkErr(err)
+		fmt.Println(id)
+		fmt.Println(department_id)
+		fmt.Println(job_name)
+	}
+
+	//删除数据
+	stmt, err = db.Prepare("delete from my_job where id = ?")
+	checkErr(err)
+
+	res, err = stmt.Exec("7")
+	checkErr(err)
+
+	affect, err = res.RowsAffected()
+	checkErr(err)
+
+	fmt.Println(affect)
+
+	db.Close()
 }
 
 func checkErr(err error) {
